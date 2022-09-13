@@ -6,6 +6,7 @@ const initialProducts = [
   {name:"Perfume de Hierbas Silvestres", id:1, price:1600, stock: 6},
   {name:"Perfume de Rosas", id:2, price:1100, stock: 10},
   {name:"Perfume de Hombres", id:3, price:2200, stock: 12},
+  {name:"Perfume de Mujeres", id:3, price:2200, stock: 8},
 ]
 
 const onAdd = (count) => {
