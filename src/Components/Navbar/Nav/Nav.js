@@ -1,10 +1,13 @@
+import { Directions } from '@mui/icons-material'
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
-export const Nav = ({ categorias }) => {
+export const Nav = ({ categories }) => {
     return (
-        <nav>
-            {categorias.map((categoria) => {
-                return <a key={categoria.id} style={styles.links} href=''>{categoria.nombre}</a>
+        <nav style={styles.links}>
+            
+            {categories.map((category) => {
+                return <NavLink key={category.id} to={category.route} >{category.title}</NavLink>
             })}
         </nav>
     )
@@ -12,6 +15,12 @@ export const Nav = ({ categorias }) => {
 
 const styles = {
     links: {
+        display: "flex",
+        // flexDirection: "row",
+        flexDirection: "column",
         padding: 10,
+        // width:500,
+        height:100,
+        wordSpacing:5,
     }
 }

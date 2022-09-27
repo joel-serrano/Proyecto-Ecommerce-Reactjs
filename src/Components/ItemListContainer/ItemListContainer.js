@@ -1,29 +1,52 @@
+import { useState, useEffect } from "react"
 import React from 'react'
-import ItemCount from "../ItemCount/ItemCount"
+import ItemList from "../ItemList/ItemList"
+import { useParams } from "react-router-dom"
+import { CircularProgress } from "@mui/material";
+import { API } from "../constants/api";
 
-const initialProducts = [
-  {name:"Perfume de Coco", id:0, price:2000, stock: 9},
-  {name:"Perfume de Hierbas Silvestres", id:1, price:1600, stock: 6},
-  {name:"Perfume de Rosas", id:2, price:1100, stock: 10},
-  {name:"Perfume de Hombres", id:3, price:2200, stock: 12},
-  {name:"Perfume de Mujeres", id:3, price:2200, stock: 8},
-]
+const ItemListContainer = ({ greeting }) => {
 
-const onAdd = (count) => {
-  console.log(`Se agregan ${count} productos`);
-}
+  const { id } = useParams();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-const ItemListContainer = ({greeting}) => {
+  useEffect(() => {
+    const url = id ? `${API.CATEGORY}${id}` : API.LIST;
+    const getItems = async () => {
+      try {
+        const respuesta = await fetch(url);
+        const data = await respuesta.json();
+        setProducts(data);
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItems();
+  }, [id]);
+
   return (
     <>
-    <h1 style={styles.center}>{greeting}</h1>
-    <ItemCount initial={1} stock={5} onAdd={onAdd}/>
+      <h1 style={styles.dash}>{greeting}</h1>
+      {loading ? (
+        <CircularProgress />
+      ) : error ? (
+        <h1>Ocurrio un error</h1>
+      ) : (
+        <ItemList products={products} />
+      )}
     </>
-  )
-}
+  );
+};
+
 const styles = {
-    center: {
-        textAlign: 'center',
-    }
+  dash: {
+    textAlign: 'center'
+  }
 }
-export default ItemListContainer
+
+export default ItemListContainer;
