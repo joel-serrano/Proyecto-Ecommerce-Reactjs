@@ -20,7 +20,7 @@ const ItemCount = ({ initial, stock, onAdd }) => {
         <>
             <div style={styles.center}>
             <button onClick={subtract}>-</button>
-            <div>{count}</div>
+            <h3>{count}</h3>
             <button onClick={add}>+</button>
             <button onClick={()=>onAdd(count)}>Agrega al carrito</button>
             </div>
@@ -31,7 +31,7 @@ const styles = {
     center: {
         display: 'flex',
         textAlign: 'center',
-        padding: 20
+        padding: 10
     }
 }
 

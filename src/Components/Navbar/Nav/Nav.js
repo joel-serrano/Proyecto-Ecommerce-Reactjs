@@ -16,7 +16,6 @@ export const Nav = ({ categories }) => {
 const styles = {
     links: {
         display: "flex",
-        // flexDirection: "row",
         flexDirection: "column",
         padding: 10,
         // width:500,
