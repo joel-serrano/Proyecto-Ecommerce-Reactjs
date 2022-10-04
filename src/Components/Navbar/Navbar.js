@@ -22,10 +22,12 @@ const Navbar = ({ name }) => {
       </div>
       <div style={styles.links}>
         <Nav categories={categories} />
-        <Link to="/cart">
+      </div>
+      <div style={styles.cart}>
+      <Link to="/cart">
           <CartWidget />
         </Link>
-      </div>
+        </div>
     </header>
   );
 };
@@ -46,10 +48,15 @@ const styles = {
   },
   links: {
     display:"flex",
-    padding: 50,
+    padding: 150,
+  },
+  cart: {
+    display:"flex",
+    padding: 30,
+    marginRight: 70,
   },
   imagen: {
-    width: "10%",
+    width: "50%",
   },
 };
 
