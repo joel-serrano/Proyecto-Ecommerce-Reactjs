@@ -1,19 +1,19 @@
-import {React, useState, useContext} from "react";
+import {React, useState} from "react";
 import ItemCount from '../ItemCount/ItemCount';
 import {Link} from 'react-router-dom';
-import { Context } from "../../Context/CartContext"
+import { useCartContext } from "../../Context/CartContext"
 
 
 export const ItemDetail = ({ producto }) => {
     const [goToCart, setIrAlCarrito] = useState (false); 
 
-    const { addItem, carrito } = useContext(Context);
+    const { addItem, carrito } = useCartContext();
 
-    const onAdd = (count) => {
-      setIrAlCarrito(true); 
-      addItem ({producto, count});
-    }
-    
+    const onAdd = (quantity) => {
+      addItem (producto, quantity)
+      setIrAlCarrito(true)
+  };
+    console.log(carrito);
   return (
     <div style={styles.container}>
       <img style={styles.img} src={producto.image} alt={producto.title} />
@@ -23,7 +23,7 @@ export const ItemDetail = ({ producto }) => {
         <p>{producto.description}</p>
         {
             goToCart
-            ? <Link to='/cart'><button>Finalizar Compra{console.log(carrito)}</button></Link>
+            ? <Link to='/cart'><button>Finalizar Compra</button></Link>
             :<ItemCount inicio={1} stock={producto.stock} onAdd={onAdd} />
  
         }
@@ -46,3 +46,5 @@ const styles = {
     maxWidth: "20%"
   }
 }
+
+export default ItemDetail;  
