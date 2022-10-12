@@ -6,15 +6,15 @@ import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import { Link } from "react-router-dom";
 
-export const Item = ({ product }) => {
+export const Item = ({ products }) => {
   return (
     <Card sx={{ maxWidth: 345 }} style={styles.container}>
       <CardActionArea>
         <CardMedia
           component="img"
           height="60%"
-          image={product.image}
-          alt={product.title}
+          image={products.image}
+          alt={products.title}
         />
         <CardContent>
           <Typography
@@ -23,15 +23,15 @@ export const Item = ({ product }) => {
             component="div"
             style={styles.title}
           >
-            {product.title}
+            {products.title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            ${product.price}
+            ${products.price}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Link to={`/product/${product.id}`}>
+        <Link to={`/product/${products.id}`}>
           <Button size="small" color="primary">
             Ver Detalles
           </Button>

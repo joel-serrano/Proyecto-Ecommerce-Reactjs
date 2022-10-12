@@ -1,45 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { CircularProgress } from "@mui/material";
 import { ItemDetail } from "./ItemDetail";
-import { API } from "../constants/api";
 import { useParams } from "react-router-dom";
+import {db} from '../../firebase/firebase'
+import {getDoc, collection, doc} from 'firebase/firestore';
 
-const ItemDetailContainer = () => {
+const ItemDetailContainter = () => {
 
-  const { id } = useParams();
-  const [product, setProduct] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+    const [product, setProduct] = useState({});
+    const [loading, setLoading] = useState (true);
+    const [error, setError] = useState(false);
 
-  useEffect(() => {
-    const url = `${API.PRODUCTO}${id}`;
-    const getItem = async () => {
-      try {
-        const resp = await fetch(url);
-        const data = await resp.json();
-        setProduct({...data, stock: Math.floor(Math.random() * 20)});
-      } catch (error) {
-        console.error(error);
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getItem();
-  }, [id]);
+    const {id} = useParams();
 
-  return (
-    <>
-      {loading ? (
-        <CircularProgress />
-      ) : error ? (
-        <h1>Ocurrio un error</h1>
-      ) : (
-        <ItemDetail producto={product} />
-      )}
-    </>
-  );
+    useEffect (()=> {
+            const productsCollection =collection(db, 'products');
+            const refDoc = doc(productsCollection, id)
+            getDoc(refDoc)
+            .then((result)=>{
+                setProduct({
+                    id:result,
+                    ...result.data()
+                })
+            })
+            .catch((err)=>{setError(true);})
+            .finally(()=>{
+                setLoading(false)
+            })
+    },[id])
 
-};
-
-export default ItemDetailContainer;
+    return (
+        <>
+        {loading ? 
+        <CircularProgress color="secondary" />
+        :
+        <ItemDetail item={product}/> 
+        }
+        </>
+        )
+    }
+    
+    export default ItemDetailContainter;

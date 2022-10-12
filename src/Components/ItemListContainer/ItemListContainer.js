@@ -1,52 +1,44 @@
 import { useState, useEffect } from "react"
 import React from 'react'
 import ItemList from "../ItemList/ItemList"
-import { useParams } from "react-router-dom"
 import { CircularProgress } from "@mui/material";
-import { API } from "../constants/api";
+import {db} from '../../firebase/firebase';
+import {getDocs, collection} from 'firebase/firestore';
 
-const ItemListContainer = ({ greeting }) => {
+function ItemListContainer({greeting}) {
 
-  const { id } = useParams();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+    const [listProduct, setListProducts] = useState([]);
+    const [loading, setLoading] = useState (true);
+    const [error, setError] = useState(false);
 
-  useEffect(() => {
-    const url = id ? `${API.CATEGORY}${id}` : API.LIST;
-    const getItems = async () => {
-      try {
-        const respuesta = await fetch(url);
-        const data = await respuesta.json();
-        setProducts(data);
-      } catch (err) {
-        console.error(err);
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getItems();
-  }, [id]);
+    useEffect (()=> {
+            const productsCollection = collection(db, 'products');
+            getDocs (productsCollection)
+            .then((data)=>{
+                const lista = data.docs.map ((product)=>{
+                    return {
+                        ...product.data(),
+                        id: product.id
+                    }
+                })
+                setListProducts(lista);
+            })
+            .catch((e)=>{setError(true);})
+            .finally(()=>{
+                setLoading(false)
+            })
+    },[])
 
-  return (
-    <>
-      <h1 style={styles.dash}>{greeting}</h1>
-      {loading ? (
-        <CircularProgress />
-      ) : error ? (
-        <h1>Ocurrio un error</h1>
-      ) : (
-        <ItemList products={products} />
-      )}
-    </>
-  );
-};
+    return (
+        <>
+        <h3>{greeting}</h3>
+        {loading ? 
+        <CircularProgress color="secondary" />
+        : 
+        <ItemList listProduct={listProduct}/> }
 
-const styles = {
-  dash: {
-    textAlign: 'center'
-  }
-}
-
-export default ItemListContainer;
+        </>
+        )
+    }
+    
+    export default ItemListContainer;
